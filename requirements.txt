@@ -1,3 +1,2 @@
 manim
-ModernGL==5.7.2
-ipython
+manim-slides

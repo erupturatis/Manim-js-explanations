@@ -1,1 +1,0 @@
-manim -pqh --rederer=opengl main.py
