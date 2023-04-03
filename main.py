@@ -11,4 +11,4 @@ class BasicExample(Slide):
         self.play(GrowFromCenter(circle))
         self.next_slide()  # Waits user to press continue to go to the next slide
 
-        self.play(Write(Text("Hello World").scale(1)))
+        self.play(Write(Text("Hello  2")))
