@@ -3,13 +3,12 @@ from manim import *
 from manim_slides import Slide
 
 class BasicExample(Slide):
-
     
     def smallwait(self):
         self.wait(0.3)
     
     def construct(self):
-        SLIDES = [self.introduction,  self.dom]
+        SLIDES = [self.basics]
 
         for slide in SLIDES:
             Vmobjects = slide()
@@ -65,9 +64,105 @@ class BasicExample(Slide):
         self.play(Indicate(warnings[0], color=RED, scale_factor=1.5))
         self.play(Write(warnings[1:]))
         self.end_loop()
-        return VGroup(warnings )
+        return VGroup(warnings)
 
-    
+    def possibilities(self):
+        square = Rectangle(height=7, width=10, color=ORANGE)
+        ax = Axes(x_range=[-3, 3], x_length=15)
+        curve = ax.plot(lambda x: np.sin(x), color=ORANGE)
+        possibilities = VGroup(
+                Text("Possibilities : ").scale(2.5),
+                Text("We can create games"),
+                Text("We can create animations"),
+                Text("We can create websites, web apps"),
+                Text("etc."),
+                Text("You can do anything you want, ").scale(0.35),
+                Text("if you know how to code it or masochism is your thing.").scale(0.35)
+                    ).arrange(DOWN, buff=0.55).scale(0.85)
+        links = VGroup(
+                Text("https://greensock.com/").set_color(GREEN), 
+                Text("https://github.com/").set_color(BLUE)
+                    ).arrange(DOWN, buff=1.55).scale(1.5)
+        self.play(Write(possibilities, run_time=4), Create(square, run_time=4))
+        self.next_slide()
+        self.play(FadeOut(square))
+        self.smallwait()
+        self.play(ReplacementTransform(possibilities, links, run_time=0.75))
+        self.play(Create(curve, run_time=4))
+        self.smallwait()
+        self.play(FadeOut(curve))
+        self.next_slide()
+        return VGroup(links)
+
+    def basics(self):
+        code_var = Code (code=
+            """
+            <script>
+
+                if (condition) {
+                    var varVariable = "True";
+                }
+
+                console.log(varVariable);
+
+                var varVariable = "False";
+
+                console.log(varVariable);
+            </script>""",
+            language="javascript")
+        
+        code_let_err = Code (code=
+            """
+            <script>
+
+                if (condition) {
+                    let letVariable = "True";
+                }
+
+                console.log(letVariable);
+
+                let letVariable = "False";
+
+                console.log(letVariable);
+            </script>""",
+            language="javascript")
+        
+        code_let_ok = Code (code=
+            """
+            <script>
+
+                if (condition) {
+                    let letVariable = "True";
+                    console.log(letVariable);
+                }
+
+            </script>""",
+            language="javascript")
+        
+        letVSconst = Text ("let = const , dar const nu poate fi modificata valoarea").scale(2.5)
+        arrows = VGroup( CurvedArrow(start_point=np.array([-1,0,0]),
+                                     end_point=np.array([2,2,0])), 
+                        CurvedArrow(start_point=np.array([-1,-1,0]),
+                                     end_point=np.array([2,0,0])) 
+                        )
+        
+
+        self.clear()
+
+        plane = NumberPlane()
+        self.add(plane)
+
+        self.play(Write(code_var))
+        self.next_slide()
+        self.play(code_var.animate.shift(LEFT*4))
+        self.smallwait()
+        self.play(Create(arrows[0]), Create(arrows[1]))
+
+        self.next_slide()
+
+        
+        return VGroup(code_var)
+
     def dom(self):
         rect = Rectangle(width=6, height=4, color=BLUE)
         text = Text("Body Text").scale(1.5)
