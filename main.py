@@ -139,13 +139,23 @@ class BasicExample(Slide):
             </script>""",
             language="javascript")
         
-        letVSconst = Text ("let = const , dar const nu poate fi modificata valoarea").scale(2.5)
+        letVSconst = VGroup( Text ("let = const ,"),
+                             Text ("dar const nu poate fi modificata valoarea")
+                            ).arrange(DOWN).scale(2.5)
         arrows = VGroup( CurvedArrow(start_point=np.array([-1,0,0]),
                                      end_point=np.array([2,2,0])), 
                         CurvedArrow(start_point=np.array([-1,-1,0]),
                                      end_point=np.array([2,0,0])) 
                         )
-        
+        varGlobal = Text("var este globala").scale(0.5)
+        varRedefine = Text("var poate fi redefinita").scale(0.5)
+        dar = Text("Dar!").scale(1.5)
+        varOld =  VGroup(
+                        Text ("var este veche"),
+                        Text ("si nu se utilizeaza in proiectele moderne")
+                        ).arrange(DOWN).scale(0.5)
+        errLet = Text("let nu poate fi folosita in afara blocului").scale(0.5)
+        errLetredefine = Text("let nu poate fi redefinita").scale(0.5)
 
         self.clear()
 
@@ -154,12 +164,34 @@ class BasicExample(Slide):
 
         self.play(Write(code_var))
         self.next_slide()
+
         self.play(code_var.animate.shift(LEFT*4))
         self.smallwait()
         self.play(Create(arrows[0]), Create(arrows[1]))
-
+        self.play(varGlobal.animate.shift(UP*2.2+RIGHT*3))
+        self.play(varRedefine.animate.shift(RIGHT*3.5+UP*0.2))
         self.next_slide()
 
+        self.play(FadeIn(dar.move_to(RIGHT*3.5+DOWN))) #aici apare Varga
+        self.play(FadeIn(varOld.move_to(RIGHT*3.5+DOWN*2)))
+        self.next_slide()
+
+        self.play(FadeOut(dar), FadeOut(varOld), FadeOut(arrows), FadeOut(varGlobal), FadeOut(varRedefine))
+        self.play(code_var.animate.shift(RIGHT*4))
+        self.play(ReplacementTransform(code_var, code_let_err))
+        self.play(code_let_err.animate.shift(LEFT*4))
+        self.smallwait()
+        self.play(Create(arrows[0]), Create(arrows[1]))
+        self.play(FadeIn(errLet.move_to(UP*2.2+RIGHT*3)))
+        self.play(FadeIn(errLetredefine.move_to(RIGHT*3.5+UP*0.2)))
+        self.next_slide()
+
+        self.play(FadeOut(arrows), FadeOut(errLet), FadeOut(errLetredefine))
+        self.play(code_let_err.animate.shift(RIGHT*4))
+        self.play(ReplacementTransform(code_let_err, code_let_ok))
+        self.wait(3)
+        self.play(code_let_ok.animate.shift(LEFT*4))
+        self.next_slide()
         
         return VGroup(code_var)
 
