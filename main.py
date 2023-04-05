@@ -136,12 +136,28 @@ class BasicExample(Slide):
                     console.log(letVariable);
                 }
 
+                letVariable = "False";
+
+            </script>""",
+            language="javascript")
+        
+        code_const = Code (code=
+            """
+            <script>
+
+                if (condition) {
+                    const constVari = "True";
+                    console.log(constVari);
+                }
+
+                constVari = "False";
+
             </script>""",
             language="javascript")
         
         letVSconst = VGroup( Text ("let = const ,"),
                              Text ("dar const nu poate fi modificata valoarea")
-                            ).arrange(DOWN).scale(2.5)
+                            ).arrange(DOWN).scale(0.5)
         arrows = VGroup( CurvedArrow(start_point=np.array([-1,0,0]),
                                      end_point=np.array([2,2,0])), 
                         CurvedArrow(start_point=np.array([-1,-1,0]),
@@ -154,8 +170,8 @@ class BasicExample(Slide):
                         Text ("var este veche"),
                         Text ("si nu se utilizeaza in proiectele moderne")
                         ).arrange(DOWN).scale(0.5)
-        errLet = Text("let nu poate fi folosita in afara blocului").scale(0.5)
-        errLetredefine = Text("let nu poate fi redefinita").scale(0.5)
+        errLet = Text("let nu poate fi folosita in afara blocului").scale(0.5).set_color(RED)
+        errLetredefine = Text("let nu poate fi redefinita").scale(0.5).set_color(RED)
 
         self.clear()
 
@@ -189,9 +205,19 @@ class BasicExample(Slide):
         self.play(FadeOut(arrows), FadeOut(errLet), FadeOut(errLetredefine))
         self.play(code_let_err.animate.shift(RIGHT*4))
         self.play(ReplacementTransform(code_let_err, code_let_ok))
+        self.remove(code_let_err) #remove invisible chars
         self.wait(3)
         self.play(code_let_ok.animate.shift(LEFT*4))
         self.next_slide()
+
+        #self.play(FadeOut(code_let_ok))
+        self.play(Write(code_const.move_to(RIGHT*4))) #bug
+        #self.play(code_const.animate.shift(RIGHT*4))
+        #self.play(FadeIn(code_let_ok))
+        self.next_slide()
+        self.play(FadeIn(letVSconst.move_to(DOWN*2.2)))
+        self.next_slide()
+        self.play(Write(Line(start=[2,-0.8,0], end=[6,-0.8,0], color=RED)))
         
         return VGroup(code_var)
 
