@@ -173,6 +173,66 @@ class BasicExample(Slide):
         errLet = Text("let nu poate fi folosita in afara blocului").scale(0.5).set_color(RED)
         errLetredefine = Text("let nu poate fi redefinita").scale(0.5).set_color(RED)
         stroke = Line(start=[2,-0.8,0], end=[6,-0.8,0], color=RED)
+        code_for_classic = Code (code=
+            """
+                const arr = ['JS','is','inCurCat']
+                
+                for (let i = 0; i < arr.length; i++) {
+                    console.log(arr[i]);
+                }""",
+            language="javascript")
+        code_for_of = Code (code=
+            """
+                const arr = ['JS','is','inaCurate']
+                
+                for (let i = 0; i < arr.length; i++) {
+                    console.log(arr[i]);
+                }
+                
+                for (const e in arr) {
+                    console.log(e)
+                }""",
+            language="javascript")
+        code_for_each_ef = Code (code=
+            """
+                const arr = ['JS','is','accurate']
+                
+                for (let i = 0; i < arr.length; i++) {
+                    console.log(arr[i]);
+                }
+                
+                for (const e in arr) {
+                    console.log(e)
+                }
+                
+                arr.forEach(e => console.log(e))""",
+            language="javascript")
+        code_for_each = Code (code=
+            """
+                const arr = ['JS','is','interesting']
+                
+                for (let i = 0; i < arr.length; i++) {
+                    console.log(arr[i]);
+                }
+                
+                for (const e in arr) {
+                    console.log(e)
+                }
+                
+                arr.forEach(console.log(e))""",
+            language="javascript")
+        code_for_in = Code (code=
+            """
+                const NotArray = {primul: 'Ion', alDoilea: 'Jason', alTreilea : 'Vasile'}
+                
+                for (const key in NotArray) {
+                    console.log(NotArray[key]);
+                }
+                
+                for (const e of Object.values(NotArray)) {
+                    console.log(e);
+                }""",
+            language="javascript")
 
         self.clear()
 
