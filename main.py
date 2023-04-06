@@ -156,9 +156,9 @@ class BasicExample(Slide):
             language="javascript")
         
         letVSconst = VGroup( Text ("let = const ,"),
-                             Text ("dar const nu poate fi modificata valoarea")
+                             Text ("dar la const nu poate fi modificata valoarea")
                             ).arrange(DOWN).scale(0.5)
-        arrows = VGroup( CurvedArrow(start_point=np.array([-1,0,0]),
+        arrows = VGroup(CurvedArrow(start_point=np.array([-1,0,0]),
                                      end_point=np.array([2,2,0])), 
                         CurvedArrow(start_point=np.array([-1,-1,0]),
                                      end_point=np.array([2,0,0])) 
@@ -172,11 +172,12 @@ class BasicExample(Slide):
                         ).arrange(DOWN).scale(0.5)
         errLet = Text("let nu poate fi folosita in afara blocului").scale(0.5).set_color(RED)
         errLetredefine = Text("let nu poate fi redefinita").scale(0.5).set_color(RED)
+        stroke = Line(start=[2,-0.8,0], end=[6,-0.8,0], color=RED)
 
         self.clear()
 
-        plane = NumberPlane()
-        self.add(plane)
+        #plane = NumberPlane()
+        #self.add(plane)
 
         self.play(Write(code_var))
         self.next_slide()
@@ -193,6 +194,7 @@ class BasicExample(Slide):
         self.next_slide()
 
         self.play(FadeOut(dar), FadeOut(varOld), FadeOut(arrows), FadeOut(varGlobal), FadeOut(varRedefine))
+        #aici se poate baga foto cu js pe diferite browsere
         self.play(code_var.animate.shift(RIGHT*4))
         self.play(ReplacementTransform(code_var, code_let_err))
         self.play(code_let_err.animate.shift(LEFT*4))
@@ -204,22 +206,20 @@ class BasicExample(Slide):
 
         self.play(FadeOut(arrows), FadeOut(errLet), FadeOut(errLetredefine))
         self.play(code_let_err.animate.shift(RIGHT*4))
-        self.play(ReplacementTransform(code_let_err, code_let_ok))
-        self.remove(code_let_err) #remove invisible chars
-        self.wait(3)
-        self.play(code_let_ok.animate.shift(LEFT*4))
+        self.play(ReplacementTransform(code_let_err, code_let_ok)) #bug
+        self.smallwait()
+        code_let_err.remove
         self.next_slide()
-
-        #self.play(FadeOut(code_let_ok))
-        self.play(Write(code_const.move_to(RIGHT*4))) #bug
-        #self.play(code_const.animate.shift(RIGHT*4))
-        #self.play(FadeIn(code_let_ok))
-        self.next_slide()
+        
+        self.play(FadeOut(code_let_ok))
+        self.play(Write(code_let_ok.move_to(LEFT*4)), Write(code_const.move_to(RIGHT*4)))
         self.play(FadeIn(letVSconst.move_to(DOWN*2.2)))
         self.next_slide()
-        self.play(Write(Line(start=[2,-0.8,0], end=[6,-0.8,0], color=RED)))
+        self.play(FadeOut(letVSconst))
+        self.play(Create(stroke))
+        self.next_slide()
         
-        return VGroup(code_var)
+        return VGroup(code_const, code_let_ok, stroke)
 
     def dom(self):
         rect = Rectangle(width=6, height=4, color=BLUE)
