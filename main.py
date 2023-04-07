@@ -136,32 +136,180 @@ class BasicExample(Slide):
                     console.log(letVariable);
                 }
 
+                letVariable = "False";
+
             </script>""",
             language="javascript")
         
-        letVSconst = Text ("let = const , dar const nu poate fi modificata valoarea").scale(2.5)
-        arrows = VGroup( CurvedArrow(start_point=np.array([-1,0,0]),
+        code_const = Code (code=
+            """
+            <script>
+
+                if (condition) {
+                    const constVari = "True";
+                    console.log(constVari);
+                }
+
+                constVari = "False";
+
+            </script>""",
+            language="javascript")
+        
+        letVSconst = VGroup( Text ("let = const ,"),
+                             Text ("dar la const nu poate fi modificata valoarea")
+                            ).arrange(DOWN).scale(0.5)
+        arrows = VGroup(CurvedArrow(start_point=np.array([-1,0,0]),
                                      end_point=np.array([2,2,0])), 
                         CurvedArrow(start_point=np.array([-1,-1,0]),
                                      end_point=np.array([2,0,0])) 
                         )
-        
+        varGlobal = Text("var este globala").scale(0.5)
+        varRedefine = Text("var poate fi redefinita").scale(0.5)
+        dar = Text("Dar!").scale(1.5)
+        varOld =  VGroup(
+                        Text ("var este veche"),
+                        Text ("si nu se utilizeaza in proiectele moderne")
+                        ).arrange(DOWN).scale(0.5)
+        errLet = Text("let nu poate fi folosita in afara blocului").scale(0.5).set_color(RED)
+        errLetredefine = Text("let nu poate fi redefinita").scale(0.5).set_color(RED)
+        stroke = Line(start=[2,-0.8,0], end=[6,-0.8,0], color=RED)
+        for_loops = Text("for loops").scale(1.5)
+        for_classic = Text("for clasic")
+        for_of = Text("for of")
+        for_each_ef = Text("for each + arrow function")
+        for_each = Text("for each")
+        for_in = Text("for in + object.values")
+
+        code_for_classic = Code (code=
+            """
+                const arr = ['JS', 'is', 'inCurCat']
+                
+                for (let i = 0; i < arr.length; i++) {
+                    console.log(arr[i]);
+                }""",
+            language="javascript")
+        code_for_of = Code (code=
+            """
+                const arr = ['JS', 'is', 'inaCurate']
+                
+                for (let i = 0; i < arr.length; i++) {
+                    console.log(arr[i]);
+                }
+                
+                for (const e of arr) {
+                    console.log(e);
+                }""",
+            language="javascript")
+        code_for_each_ef = Code (code=
+            """
+                const arr = ['JS', 'is', 'accurate']
+                
+                for (let i = 0; i < arr.length; i++) {
+                    console.log(arr[i]);
+                }
+                
+                arr.forEach(e => console.log(e));
+
+                for (const e of arr) {
+                    console.log(e);
+                }""",
+            language="javascript")
+        code_for_each = Code (code=
+            """
+                const arr = ['JS', 'is', 'interesting']
+                
+                for (let i = 0; i < arr.length; i++) {
+                    console.log(arr[i]);
+                }
+                
+                arr.forEach(console.log(e));
+
+                for (const e of arr) {
+                    console.log(e);
+                }""",
+            language="javascript")
+        code_for_in = Code (code=
+            """
+                const NotArray = {primul: 'Ion', alDoilea: 'Jason', alTreilea : 'Vasile'}
+                
+                for (const key in NotArray) {
+                    console.log(NotArray[key]);
+                }
+                
+                for (const e of Object.values(NotArray)) {
+                    console.log(e);
+                }""",
+            language="javascript")
 
         self.clear()
 
-        plane = NumberPlane()
-        self.add(plane)
+        #plane = NumberPlane()
+        #self.add(plane)
 
         self.play(Write(code_var))
         self.next_slide()
+
         self.play(code_var.animate.shift(LEFT*4))
         self.smallwait()
         self.play(Create(arrows[0]), Create(arrows[1]))
-
+        self.play(varGlobal.animate.shift(UP*2.2+RIGHT*3))
+        self.play(varRedefine.animate.shift(RIGHT*3.5+UP*0.2))
         self.next_slide()
 
+        self.play(FadeIn(dar.move_to(RIGHT*3.5+DOWN))) #aici apare Varga
+        self.play(FadeIn(varOld.move_to(RIGHT*3.5+DOWN*2)))
+        self.next_slide()
+
+        self.play(FadeOut(dar), FadeOut(varOld), FadeOut(arrows), FadeOut(varGlobal), FadeOut(varRedefine))
+        #aici se poate baga foto cu js pe diferite browsere
+        self.play(code_var.animate.shift(RIGHT*4))
+        self.play(ReplacementTransform(code_var, code_let_err))
+        self.play(code_let_err.animate.shift(LEFT*4))
+        self.smallwait()
+        self.play(Create(arrows[0]), Create(arrows[1]))
+        self.play(FadeIn(errLet.move_to(UP*2.2+RIGHT*3)))
+        self.play(FadeIn(errLetredefine.move_to(RIGHT*3.5+UP*0.2)))
+        self.next_slide()
+
+        self.play(FadeOut(arrows), FadeOut(errLet), FadeOut(errLetredefine))
+        self.play(code_let_err.animate.shift(RIGHT*4))
+        self.play(ReplacementTransform(code_let_err, code_let_ok)) #bug era, deja nu-i)
+        self.smallwait()
+        code_let_err.remove
+        self.next_slide()
         
-        return VGroup(code_var)
+        self.play(FadeOut(code_let_ok))
+        self.play(Write(code_let_ok.move_to(LEFT*4)), Write(code_const.move_to(RIGHT*4)))
+        self.play(FadeIn(letVSconst.move_to(DOWN*2.2)))
+        self.next_slide()
+        self.play(FadeOut(letVSconst))
+        self.play(Create(stroke))
+        self.next_slide()
+
+        self.play(FadeOut(code_let_ok), FadeOut(code_const), FadeOut(stroke))
+        self.play(Write(for_loops.move_to(UP*2.2)))
+        self.play(Write(code_for_classic))
+        self.play(FadeOut(for_loops))
+        self.play(Write(for_classic.move_to(UP*2.2)))
+        self.next_slide()
+        self.play(FadeOut(for_classic))
+        self.play(ReplacementTransform(code_for_classic, code_for_of))
+        self.play(Write(for_of.move_to(UP*2.2)))
+        self.next_slide()
+        self.play(FadeOut(for_of))
+        self.play(ReplacementTransform(code_for_of, code_for_each_ef))
+        self.play(Write(for_each_ef.move_to(UP*2.4)))
+        self.next_slide()
+        self.play(FadeOut(for_each_ef))
+        self.play(ReplacementTransform(code_for_each_ef, code_for_each))
+        self.play(Write(for_each.move_to(UP*2.4)))
+        self.next_slide()
+        self.play(FadeOut(for_each))
+        self.play(ReplacementTransform(code_for_each, code_for_in))
+        self.play(Write(for_in.move_to(UP*2.2)))
+        self.next_slide()
+        
+        return VGroup(code_for_in, for_in)
 
     def dom(self):
         rect = Rectangle(width=6, height=4, color=BLUE)
