@@ -173,9 +173,16 @@ class BasicExample(Slide):
         errLet = Text("let nu poate fi folosita in afara blocului").scale(0.5).set_color(RED)
         errLetredefine = Text("let nu poate fi redefinita").scale(0.5).set_color(RED)
         stroke = Line(start=[2,-0.8,0], end=[6,-0.8,0], color=RED)
+        for_loops = Text("for loops").scale(1.5)
+        for_classic = Text("for clasic")
+        for_of = Text("for of")
+        for_each_ef = Text("for each + arrow function")
+        for_each = Text("for each")
+        for_in = Text("for in + object.values")
+
         code_for_classic = Code (code=
             """
-                const arr = ['JS','is','inCurCat']
+                const arr = ['JS', 'is', 'inCurCat']
                 
                 for (let i = 0; i < arr.length; i++) {
                     console.log(arr[i]);
@@ -183,43 +190,43 @@ class BasicExample(Slide):
             language="javascript")
         code_for_of = Code (code=
             """
-                const arr = ['JS','is','inaCurate']
+                const arr = ['JS', 'is', 'inaCurate']
                 
                 for (let i = 0; i < arr.length; i++) {
                     console.log(arr[i]);
                 }
                 
-                for (const e in arr) {
-                    console.log(e)
+                for (const e of arr) {
+                    console.log(e);
                 }""",
             language="javascript")
         code_for_each_ef = Code (code=
             """
-                const arr = ['JS','is','accurate']
+                const arr = ['JS', 'is', 'accurate']
                 
                 for (let i = 0; i < arr.length; i++) {
                     console.log(arr[i]);
                 }
                 
-                for (const e in arr) {
-                    console.log(e)
-                }
-                
-                arr.forEach(e => console.log(e))""",
+                arr.forEach(e => console.log(e));
+
+                for (const e of arr) {
+                    console.log(e);
+                }""",
             language="javascript")
         code_for_each = Code (code=
             """
-                const arr = ['JS','is','interesting']
+                const arr = ['JS', 'is', 'interesting']
                 
                 for (let i = 0; i < arr.length; i++) {
                     console.log(arr[i]);
                 }
                 
-                for (const e in arr) {
-                    console.log(e)
-                }
-                
-                arr.forEach(console.log(e))""",
+                arr.forEach(console.log(e));
+
+                for (const e of arr) {
+                    console.log(e);
+                }""",
             language="javascript")
         code_for_in = Code (code=
             """
@@ -266,7 +273,7 @@ class BasicExample(Slide):
 
         self.play(FadeOut(arrows), FadeOut(errLet), FadeOut(errLetredefine))
         self.play(code_let_err.animate.shift(RIGHT*4))
-        self.play(ReplacementTransform(code_let_err, code_let_ok)) #bug
+        self.play(ReplacementTransform(code_let_err, code_let_ok)) #bug era, deja nu-i)
         self.smallwait()
         code_let_err.remove
         self.next_slide()
@@ -278,8 +285,31 @@ class BasicExample(Slide):
         self.play(FadeOut(letVSconst))
         self.play(Create(stroke))
         self.next_slide()
+
+        self.play(FadeOut(code_let_ok), FadeOut(code_const), FadeOut(stroke))
+        self.play(Write(for_loops.move_to(UP*2.2)))
+        self.play(Write(code_for_classic))
+        self.play(FadeOut(for_loops))
+        self.play(Write(for_classic.move_to(UP*2.2)))
+        self.next_slide()
+        self.play(FadeOut(for_classic))
+        self.play(ReplacementTransform(code_for_classic, code_for_of))
+        self.play(Write(for_of.move_to(UP*2.2)))
+        self.next_slide()
+        self.play(FadeOut(for_of))
+        self.play(ReplacementTransform(code_for_of, code_for_each_ef))
+        self.play(Write(for_each_ef.move_to(UP*2.4)))
+        self.next_slide()
+        self.play(FadeOut(for_each_ef))
+        self.play(ReplacementTransform(code_for_each_ef, code_for_each))
+        self.play(Write(for_each.move_to(UP*2.4)))
+        self.next_slide()
+        self.play(FadeOut(for_each))
+        self.play(ReplacementTransform(code_for_each, code_for_in))
+        self.play(Write(for_in.move_to(UP*2.2)))
+        self.next_slide()
         
-        return VGroup(code_const, code_let_ok, stroke)
+        return VGroup(code_for_in, for_in)
 
     def dom(self):
         rect = Rectangle(width=6, height=4, color=BLUE)
