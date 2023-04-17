@@ -166,6 +166,7 @@ class BasicExample(Slide):
         varGlobal = Text("var este globala").scale(0.5)
         varRedefine = Text("var poate fi redefinita").scale(0.5)
         dar = Text("Dar!").scale(1.5)
+        img = ImageMobject("robert_varga_bg").scale(0.75)
         varOld =  VGroup(
                         Text ("var este veche"),
                         Text ("si nu se utilizeaza in proiectele moderne")
@@ -256,8 +257,11 @@ class BasicExample(Slide):
         self.play(varRedefine.animate.shift(RIGHT*3.5+UP*0.2))
         self.next_slide()
 
-        self.play(FadeIn(dar.move_to(RIGHT*3.5+DOWN))) #aici apare Varga
-        self.play(FadeIn(varOld.move_to(RIGHT*3.5+DOWN*2)))
+        self.play(FadeIn(dar.move_to(RIGHT*3.5+DOWN)),
+                  img.move_to(RIGHT*10+DOWN*5).rotate(0.75).animate.shift(LEFT*4+UP*2)) #aici apare Varga
+        self.wait(1)
+        self.play(img.animate.shift(RIGHT*4+DOWN*2).rotate(-0.75)) #aici dispare Varga
+        self.play(FadeOut(img), FadeIn(varOld.move_to(RIGHT*3.5+DOWN*2)))
         self.next_slide()
 
         self.play(FadeOut(dar), FadeOut(varOld), FadeOut(arrows), FadeOut(varGlobal), FadeOut(varRedefine))
