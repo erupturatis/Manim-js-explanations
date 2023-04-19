@@ -8,12 +8,16 @@ class BasicExample(Slide):
         self.wait(0.3)
     
     def construct(self):
-        SLIDES = [self.basics]
+        SLIDES = [self.what_to_learn]
 
         for slide in SLIDES:
             Vmobjects = slide()
             self.play(FadeOut(Vmobjects)) 
             self.clear()
+    
+    def sectiunea_1 (self):
+
+        return [self.introduction, self.what_to_learn, self.possibilities, self.basics]
 
     def introduction(self):
         circle = Circle(radius=3.85, color=BLUE)
@@ -65,6 +69,57 @@ class BasicExample(Slide):
         self.play(Write(warnings[1:]))
         self.end_loop()
         return VGroup(warnings)
+    
+    def what_to_learn(self):
+        intro = VGroup( Text("What should").scale(2.5),
+                        Text("you learn").scale(2.5)).arrange(DOWN, buff=0.55)
+        img1 = ImageMobject("html_logo.png").scale(1.2)
+        img2 = ImageMobject("css_logo.png").scale(0.27)
+        img3 = ImageMobject("react_logo.png").scale(0.35)
+        img4 = ImageMobject("nodejs_logo.png").scale(0.25)
+        img5 = ImageMobject("tailwind_logo.png")
+
+        img6 = ImageMobject("babel_logo.png").scale(0.3)
+        img7 = ImageMobject("webpack_logo.png").scale(0.25)
+        img8 = ImageMobject("mysql_logo.png").scale(0.3)
+        img9 = ImageMobject("vitejs-logo.png").scale(0.3)
+        img10 = ImageMobject("nginx_logo.png").scale(0.3)
+
+        txt = Text("E putin si usor!!! \U0001F609").scale(1.5)
+
+        #plane = NumberPlane()
+        #self.add(plane)
+
+        self.play(Write(intro))
+        self.next_slide()
+        self.play(FadeOut(intro))
+        self.play(img1.move_to(LEFT*8+UP*5).animate.shift(RIGHT*3+DOWN*3), run_time=3)
+        self.play(img2.move_to(LEFT*8+UP*7).animate.shift(RIGHT*5.7+DOWN*5), run_time=3)
+        self.play(img3.move_to(LEFT*6+UP*7).animate.shift(RIGHT*6+DOWN*5), run_time=2)
+        self.play(img4.move_to(LEFT*4+UP*7).animate.shift(RIGHT*6.4+DOWN*5), run_time=1)
+        self.play(img5.move_to(LEFT*2+UP*7).animate.shift(RIGHT*7+DOWN*5.1), run_time=1)
+
+        self.play(img6.move_to(LEFT*8+DOWN*5).animate.shift(RIGHT*3+UP*3), run_time=0.7)
+        self.play(img7.move_to(LEFT*8+DOWN*7).animate.shift(RIGHT*5.7+UP*5), run_time=0.5)
+        self.play(img8.move_to(LEFT*6+DOWN*7).animate.shift(RIGHT*6+UP*4.5), run_time=0.4)
+        self.play(img9.move_to(LEFT*4+DOWN*7).animate.shift(RIGHT*6.4+UP*5), run_time=0.3)
+        self.play(img10.move_to(LEFT*2+DOWN*7).animate.shift(RIGHT*7+UP*5.1), run_time=0.2)
+        self.smallwait()
+        self.play(Write(txt))
+        self.remove(img1)
+        self.remove(img2)
+        self.remove(img3)
+        self.remove(img4)
+        self.remove(img5)
+        self.remove(img6)
+        self.remove(img7)
+        self.remove(img8)
+        self.remove(img9)
+        self.remove(img10)
+
+        self.next_slide()
+
+        return VGroup(txt)
 
     def possibilities(self):
         square = Rectangle(height=7, width=10, color=ORANGE)
