@@ -16,8 +16,11 @@ class BasicExample(Slide):
             self.clear()
     
     def sectiunea_1 (self):
-
-        return [self.introduction, self.what_to_learn, self.possibilities, self.basics]
+        return [self.introduction, self.what_to_learn, self.possibilities,
+                self.js_detached_from_reality]
+    
+    def sectiunea_2 (self):
+        return [self.basics] # continue with dom manipulation, animations, etc
 
     def introduction(self):
         circle = Circle(radius=3.85, color=BLUE)
@@ -51,7 +54,7 @@ class BasicExample(Slide):
         self.smallwait()
         self.play(ReplacementTransform(hello, java.scale(2.1), run_time=0.5))
         self.play(Write(authors.scale(0.5).move_to(DOWN)))
-        self.next_slide()  # Waits user to press continue to go to the next slide
+        self.next_slide()
         
         self.play(FadeOut(circle), FadeOut(java), FadeOut(authors))
         self.clear()
@@ -86,45 +89,100 @@ class BasicExample(Slide):
         img10 = ImageMobject("nginx_logo.png").scale(0.3)
         gr = Group()
         gr.add(img1, img2, img3, img4, img5, img6, img7, img8, img9, img10)
-        gr.arrange_in_grid(2, 5, buff=0.05)
+        gr.arrange_in_grid(2, 5, buff=0.5).scale_to_fit_width(15)
+        gr.move_to([0.4,0.2,0])
 
         txt = Text("E putin si usor!!! \U0001F609").scale(1.5)
 
-        self.play(FadeIn(gr, rate_functions = rush_into))
+        self.play(Write(intro))
+        self.next_slide()
+        self.play(FadeOut(intro))
+        self.play(AnimationGroup(*[FadeIn(img) for img in gr], lag_ratio=0.5, rate_func=rush_into))
+        self.smallwait()
+        self.play(Write(txt))
+        self.next_slide()
+        self.play(FadeOut(gr))
+        return VGroup(txt)
+    
+    def js_detached_from_reality(self):
+        code_js = Code (code= 
+            """
+            [] + {};
 
-        #plane = NumberPlane()
-        #self.add(plane)
+            [] + [];
 
-        # self.play(Write(intro))
-        # self.next_slide()
-        # self.play(FadeOut(intro))
-        # self.play(img1.move_to(LEFT*8+UP*5).animate.shift(RIGHT*3+DOWN*3), run_time=3)
-        # self.play(img2.move_to(LEFT*8+UP*7).animate.shift(RIGHT*5.7+DOWN*5), run_time=3)
-        # self.play(img3.move_to(LEFT*6+UP*7).animate.shift(RIGHT*6+DOWN*5), run_time=2)
-        # self.play(img4.move_to(LEFT*4+UP*7).animate.shift(RIGHT*6.4+DOWN*5), run_time=1)
-        # self.play(img5.move_to(LEFT*2+UP*7).animate.shift(RIGHT*7+DOWN*5.1), run_time=1)
+            {} + {};
 
-        # self.play(img6.move_to(LEFT*8+DOWN*5).animate.shift(RIGHT*3+UP*3), run_time=0.7)
-        # self.play(img7.move_to(LEFT*8+DOWN*7).animate.shift(RIGHT*5.7+UP*5), run_time=0.5)
-        # self.play(img8.move_to(LEFT*6+DOWN*7).animate.shift(RIGHT*6+UP*4.5), run_time=0.4)
-        # self.play(img9.move_to(LEFT*4+DOWN*7).animate.shift(RIGHT*6.4+UP*5), run_time=0.3)
-        # self.play(img10.move_to(LEFT*2+DOWN*7).animate.shift(RIGHT*7+UP*5.1), run_time=0.2)
-        # self.smallwait()
-        # self.play(Write(txt))
-        # self.remove(img1)
-        # self.remove(img2)
-        # self.remove(img3)
-        # self.remove(img4)
-        # self.remove(img5)
-        # self.remove(img6)
-        # self.remove(img7)
-        # self.remove(img8)
-        # self.remove(img9)
-        # self.remove(img10)
+            {} + [];""",
+            language="javascript",
+            background_stroke_width=0,
+            font_size=48)
+        code_js_bool = Code (code=
+            """
+            0 == '0';
 
+            0 == [];
+
+            [] == '0';""",
+            language="javascript",
+            background_stroke_width=0,
+            font_size=60)
+        code_js_arith = Code (code=
+            """
+            const x = 1 + '1';
+
+            const y = 1 - '1';
+
+            const z = +[];
+            
+            ('b' + 'a'+ +'a' + 'a').toLowerCase();""",
+            language="javascript",
+            background_stroke_width=0,
+            font_size=48)
+        arr_obj = Text("'[object Object]'").set_color(GREEN)
+        arr_arr = Text("''").scale(1.5).set_color(GREEN)
+        obj_arr = Text("0").scale(2.5).set_color(RED_A)
+        obj_obj = Text("'[object Object][object Object]'").set_color(GREEN)
+        txt_true = Text("True").scale(2.5).set_color(GREEN)
+        txt_true2 = Text("True").scale(2.5).set_color(GREEN)
+        txt_false = Text("False").scale(2.5).set_color(RED_A)
+        txt_x = Text("x = '11'").scale(1.5).set_color_by_gradient(DARK_BLUE, GREEN)
+        txt_y = Text("y = 0").scale(1.5).set_color_by_gradient(DARK_BLUE, GREEN)
+        txt_z = Text("z = 0").scale(1.5).set_color_by_gradient(DARK_BLUE, GREEN)
+        txt_banana = Text("'banana'").scale(1.5).set_color_by_gradient(YELLOW, YELLOW_D, YELLOW)
+
+        code_js.to_edge(LEFT, buff=0.5)
+        self.play(Write(code_js))
+        self.next_slide()
+        self.play(Write(arr_obj.move_to(UP*2+LEFT*0.3)))
+        self.next_slide()
+        self.play(Write(arr_arr.move_to(UP*0.8).align_to(arr_obj, LEFT)))
+        self.next_slide()
+        self.play(Write(obj_obj.move_to(DOWN*0.7).align_to(arr_obj, LEFT)))
+        self.next_slide()
+        self.play(Write(obj_arr.move_to(DOWN*2).align_to(arr_obj, LEFT)))
+        self.next_slide()
+        self.play(FadeOut(arr_obj), FadeOut(arr_arr), FadeOut(obj_arr), FadeOut(obj_obj))
+        self.play(ReplacementTransform(code_js, code_js_bool.to_edge(LEFT, buff=0.5)))
+        self.play(Write(txt_true.next_to(code_js_bool, RIGHT, buff=0.85).align_to(code_js_bool, UP)))
+        self.play(Write(txt_true2.next_to(code_js_bool, RIGHT, buff=0.85)))
+        self.next_slide()
+        self.play(Write(txt_false.next_to(code_js_bool, RIGHT, buff=0.85).align_to(code_js_bool, DOWN)))
+        self.next_slide()
+        self.play(FadeOut(txt_true), FadeOut(txt_true2), FadeOut(txt_false))
+        self.play(ReplacementTransform(code_js_bool, code_js_arith.to_edge(LEFT, buff=0.5)))
+        self.next_slide()
+        self.play(Write(txt_x.move_to(UP*2+RIGHT*3)))
+        self.next_slide()
+        self.play(Write(txt_y.move_to(UP*0.8).align_to(txt_x, LEFT)))
+        self.next_slide()
+        self.play(Write(txt_z.move_to(DOWN*0.5).align_to(txt_x, LEFT)))
+        self.next_slide()
+        self.play(Write(txt_banana.next_to(code_js_arith, DOWN, buff=0.35)))
         self.next_slide()
 
-        return VGroup(txt)
+
+        return VGroup(code_js_arith, txt_x, txt_y, txt_z, txt_banana)
 
     def possibilities(self):
         square = Rectangle(height=7, width=10, color=ORANGE)
@@ -304,9 +362,6 @@ class BasicExample(Slide):
 
         self.clear()
 
-        #plane = NumberPlane()
-        #self.add(plane)
-
         self.play(Write(code_var))
         self.next_slide()
 
@@ -325,7 +380,6 @@ class BasicExample(Slide):
         self.next_slide()
 
         self.play(FadeOut(dar), FadeOut(varOld), FadeOut(arrows), FadeOut(varGlobal), FadeOut(varRedefine))
-        #aici se poate baga foto cu js pe diferite browsere
         self.play(code_var.animate.shift(RIGHT*4))
         self.play(ReplacementTransform(code_var, code_let_err))
         self.play(code_let_err.animate.shift(LEFT*4))
