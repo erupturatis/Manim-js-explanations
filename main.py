@@ -8,7 +8,8 @@ class BasicExample(Slide):
         self.wait(0.3)
     
     def construct(self):
-        SLIDES = [self.what_to_learn]
+        SLIDES = [self.introduction, self.what_to_learn,
+                self.js_detached_from_reality, self.possibilities,self.basics]
 
         for slide in SLIDES:
             Vmobjects = slide()
@@ -16,8 +17,8 @@ class BasicExample(Slide):
             self.clear()
     
     def sectiunea_1 (self):
-        return [self.introduction, self.what_to_learn, self.possibilities,
-                self.js_detached_from_reality]
+        return [self.introduction, self.what_to_learn,
+                self.js_detached_from_reality, self.possibilities]
     
     def sectiunea_2 (self):
         return [self.basics] # continue with dom manipulation, animations, etc
@@ -139,10 +140,10 @@ class BasicExample(Slide):
             language="javascript",
             background_stroke_width=0,
             font_size=48)
-        arr_obj = Text("'[object Object]'").set_color(GREEN)
+        arr_obj = Text("'[object object]'").set_color(GREEN)
         arr_arr = Text("''").scale(1.5).set_color(GREEN)
         obj_arr = Text("0").scale(2.5).set_color(RED_A)
-        obj_obj = Text("'[object Object][object Object]'").set_color(GREEN)
+        obj_obj = Text("'[object object][object object]'").set_color(GREEN)
         txt_true = Text("True").scale(2.5).set_color(GREEN)
         txt_true2 = Text("True").scale(2.5).set_color(GREEN)
         txt_false = Text("False").scale(2.5).set_color(RED_A)
@@ -213,6 +214,8 @@ class BasicExample(Slide):
         return VGroup(links)
 
     def basics(self):
+        intro_basic = Text ("Now lets get down on business").scale(1.5).set_color_by_gradient(RED, DARK_BLUE, RED)
+        intro_basic2 = Text ("We will start with the basics").scale(1.5).set_color_by_gradient(ORANGE, DARK_BLUE, ORANGE)
         code_var = Code (code=
             """
             <script>
@@ -362,6 +365,13 @@ class BasicExample(Slide):
 
         self.clear()
 
+        self.play(Write(intro_basic))
+        self.wait(2)
+        self.play(ReplacementTransform(intro_basic, intro_basic2))
+        self.next_slide()
+
+        self.play(FadeOut(intro_basic2))
+        self.clear()
         self.play(Write(code_var))
         self.next_slide()
 
@@ -373,9 +383,9 @@ class BasicExample(Slide):
         self.next_slide()
 
         self.play(FadeIn(dar.move_to(RIGHT*3.5+DOWN)),
-                  img.move_to(RIGHT*10+DOWN*5).rotate(0.75).animate.shift(LEFT*4+UP*2)) #aici apare Varga
+                  img.move_to(RIGHT*10+DOWN*5).rotate(0.75).animate.shift(LEFT*4+UP*2))
         self.wait(1)
-        self.play(img.animate.shift(RIGHT*4+DOWN*2).rotate(-0.75)) #aici dispare Varga
+        self.play(img.animate.shift(RIGHT*4+DOWN*2).rotate(-0.75))
         self.play(FadeOut(img), FadeIn(varOld.move_to(RIGHT*3.5+DOWN*2)))
         self.next_slide()
 
@@ -391,7 +401,7 @@ class BasicExample(Slide):
 
         self.play(FadeOut(arrows), FadeOut(errLet), FadeOut(errLetredefine))
         self.play(code_let_err.animate.shift(RIGHT*4))
-        self.play(ReplacementTransform(code_let_err, code_let_ok)) #bug era, deja nu-i)
+        self.play(ReplacementTransform(code_let_err, code_let_ok))
         self.smallwait()
         code_let_err.remove
         self.next_slide()
