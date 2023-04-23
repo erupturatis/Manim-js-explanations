@@ -800,25 +800,3 @@ anime({
         canvasCons.next_to(canvasProsList, DOWN, buff=0.25)
         canvasConsList.next_to(canvasCons, DOWN, buff=0.25)
         self.play(Write(canvasCons), Write(canvasConsList))
-
-
-        
-    
-
-
-
-
-
-        
-
-
-        
-
-
-        
-
-        
-
-        
-
-
