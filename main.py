@@ -8,20 +8,32 @@ class BasicExample(Slide):
         self.wait(0.3)
     
     def construct(self):
-        SLIDES = [self.introduction, self.what_to_learn,
-                self.js_detached_from_reality, self.possibilities,self.basics]
+        # finalArr = self.animConstructor(self.introduction, self.basics, self.domAndAnims) 
+        # SLIDES = [*self.animConstructor(self.domAndAnims)]
+        SLIDES = [*self.domAndAnims()]
 
         for slide in SLIDES:
             Vmobjects = slide()
             self.play(FadeOut(Vmobjects)) 
             self.clear()
+
+    def animConstructor(self, *args):
+        arr = []
+        for arg in args:
+            arr = [*arr, *arg()]
+        return arr
     
-    def sectiunea_1 (self):
+    def introduction (self):
         return [self.introduction, self.what_to_learn,
                 self.js_detached_from_reality, self.possibilities,self.basics]
     
-    def sectiunea_2 (self):
+    def basics (self):
         return [self.basics] # continue with dom manipulation, animations, etc
+    
+    def domAndAnims(self):
+        return [self.dom, self.anims, self.graphicalInterfaces]
+
+
 
     def introduction(self):
         circle = Circle(radius=3.85, color=BLUE)
@@ -437,31 +449,352 @@ class BasicExample(Slide):
         
         return VGroup(code_for_in, for_in)
 
+    def basicLag(self, time, *args):
+        basicgr = VGroup(*args)
+        self.play(Create(basicgr, lag_ratio = 0.2, run_time = time))
+        return basicgr
+
     def dom(self):
-        rect = Rectangle(width=6, height=4, color=BLUE)
-        text = Text("Body Text").scale(1.5)
-        rect_text = VGroup(rect, text)
-        rect_text.arrange(DOWN)
-        rect_text.set_width(6)
-        rect_text.set_height(3)
-        rect_text.move_to(ORIGIN)
+        rect = Rectangle(width=3, height=2, color=BLUE)
+        self.play(Create(rect))
+        self.play(rect.animate.shift(LEFT*3 + UP*2))
+        text = Text("html").scale(1)
+        text.next_to(rect, UP)
 
-        # Create three divs nested below the rectangle
-        div1 = Rectangle(width=2, height=1, color=YELLOW)
-        id1 = Text("id1").scale(0.7).next_to(div1, DOWN)
-        div1_id = VGroup(div1, id1).next_to(rect_text, DOWN, buff=0.5)
+        self.play(Write(text))
+        self.next_slide()
 
-        div2 = Rectangle(width=2, height=1, color=YELLOW)
-        id2 = Text("id2").scale(0.7).next_to(div2, DOWN)
-        div2_id = VGroup(div2, id2).next_to(div1_id, DOWN, buff=0.5)
+        squarearr = [ Square(side_length=0.25, stroke_width=0.5, color=BLUE) for i in range(100) ]
+        groupsquare = VGroup(*squarearr) 
+        # arrange in grid 20x20
+        groupsquare.arrange_in_grid(10,10)
+        # move to center right
+        groupsquare.move_to(RIGHT*3.5+UP*2)
+        # create and add a slight delay between each animation
+        self.play(Create(groupsquare, lag_ratio=0.2, run_time=6))
+        self.next_slide()
+        
+        div1 = Rectangle(width=2, height=1, color=BLUE_A)
+        div2 = Rectangle(width=2, height=1, color=BLUE_A)
+        div3 = Rectangle(width=2, height=1, color=BLUE_A)
 
-        div3 = Rectangle(width=2, height=1, color=YELLOW)
-        id3 = Text("id3").scale(0.7).next_to(div3, DOWN)
-        div3_id = VGroup(div3, id3).next_to(div2_id, DOWN, buff=0.5)
+        div1.next_to(rect, DOWN, buff=1.25)
+        
+        div2.next_to(div1, LEFT, buff=1)
+        div3.next_to(div1, RIGHT, buff=1)
 
-        # Add everything to the scene
-        self.play(Create(rect_text))
-        self.play(Create(div1_id))
-        self.play(Create(div2_id))
-        self.play(Create(div3_id))
-        self.wait()
+        self.play(FadeOut(groupsquare))
+        grdivs = self.basicLag(1, div1, div2, div3)
+        # puts a text with id of div at the bottom of each div
+        self.next_slide()
+        iddiv1 = Text("#rosca").scale(0.5)
+        iddiv2 = Text("#vasilepepe").scale(0.5)
+        iddiv3 = Text("#varga").scale(0.5)
+
+        iddiv1.next_to(div1, DOWN, buff=0.5)
+        iddiv2.next_to(div2, DOWN, buff=0.5)
+        iddiv3.next_to(div3, DOWN, buff=0.5)
+        
+        grids = self.basicLag(1, iddiv1, iddiv2, iddiv3)
+        self.next_slide()
+        # show function for working with the dom
+        fn1dom = Code(code = """
+            const div = document.getElementById("rosca");            
+        """, language='javascript').scale(0.5)
+        
+        fn2dom = Code(code = """
+            const div = document.getElementById("vasilepepe"); 
+        """, language='javascript').scale(0.5)
+
+        fn3dom = Code(code = """
+            const div = document.getElementById("varga");
+        """, language='javascript').scale(0.5)
+
+        fn1dom.move_to(RIGHT*4 + UP*2)
+        fn2dom.move_to(RIGHT*4 + UP*2)
+        fn3dom.move_to(RIGHT*4 + UP*2)
+        self.play(Write(fn1dom))
+
+        self.play(ReplacementTransform(fn1dom, fn2dom))
+        self.play(ReplacementTransform(fn2dom, fn3dom))
+
+        self.next_slide()
+        
+        self.play(FadeOut(fn3dom))
+        
+        fn1query = Code(code = """ roscadiv = document.querySelector("#rosca"); """, language='javascript').scale(0.5)
+        fn1getElementById = Code(code = """ roscadiv = document.getElementById("rosca"); """, language='javascript').scale(0.5)
+
+        fn1query.move_to(RIGHT*4 + UP*2)
+        fn1getElementById.next_to(fn1query, DOWN, buff=0.5)
+        
+        self.play(Write(fn1query))
+        self.play(Write(fn1getElementById))
+        
+        self.next_slide()
+
+        self.play(FadeOut(fn1getElementById))
+
+        manipulateStyle = Code(code = """ rosca.style.backgroundColor = "red"; """, language='javascript').scale(0.5)
+        manipulateClass = Code(code = """ rosca.classList.add("red"); """, language='javascript').scale(0.5)
+        manipulateInnerHTML = Code(code = """ rosca.innerHTML = "mortimati inchid usa"; """, language='javascript').scale(0.5)
+
+        manipulateStyle.next_to(fn1query, DOWN, buff=0.5)
+        manipulateClass.next_to(manipulateStyle, DOWN, buff=0.5)
+        manipulateInnerHTML.next_to(manipulateClass, DOWN, buff=0.5) 
+        
+        self.play(Write(manipulateStyle))
+        self.play(Write(manipulateClass))
+        self.play(Write(manipulateInnerHTML))
+        self.next_slide()
+        
+        child = Code(code = """ 
+        const babyrosca = document.createElement("div"); 
+        babyrosca.classList.add("cevaoropsit");
+        rosca.appendChild(babyrosca); 
+           """, language='javascript').scale(0.5)
+        
+        child.next_to(manipulateInnerHTML, DOWN, buff=0.5)
+        self.play(Write(child))
+        self.next_slide()
+
+    def anims(self):
+        animTex = Text("Animations").scale(1.25)
+        animTex.move_to(UP*2.5)
+        self.play(Write(animTex))
+        self.next_slide()
+        # makes animTex smaller in scale and shifted up 
+        self.play(animTex.animate.scale(0.5).shift(UP*1))
+
+        transTex = Text("Transition").scale(0.75)
+        keyframeTex = Text("Keyframes").scale(0.75)
+        engineTex = Text("Animation Engine").scale(0.75)
+
+        keyframeTex.next_to(animTex, DOWN, buff=1)
+        transTex.next_to(keyframeTex, LEFT, buff=1)
+        engineTex.next_to(keyframeTex, RIGHT, buff=1)
+        self.play(Write(transTex), Write(keyframeTex), Write(engineTex))
+        self.next_slide()
+        # presents transition based animation
+        self.play(engineTex.animate.scale(0.3).next_to(animTex, LEFT), keyframeTex.animate.scale(0.3).next_to(animTex, RIGHT), transTex.animate.scale(1).next_to(animTex, DOWN*1.5))
+        self.next_slide()
+
+        cssSquare = Code (code=
+            """
+            .square {
+                width: 100px;
+                height: 100px;
+                position: absolute;
+                transition: all 1s ease-in-out;
+            }
+                """,
+            language="javascript").scale(0.5)
+
+        cssStat1 = Code (code=
+            """
+.class1 {
+  background-color: red;
+  left: -100px;
+}
+                """,
+            language="javascript").scale(0.5)
+
+        cssStat2 = Code (code=
+            """
+.class2 {
+  background-color: blue;
+  left: 100px;
+}
+                """,
+            language="javascript").scale(0.5)
+        
+        
+        cssStat1.next_to(cssSquare, DOWN + LEFT, buff=0.5)
+        cssStat2.next_to(cssSquare, DOWN + RIGHT, buff=0.5)
+
+        self.play(Write(cssSquare), Write(cssStat1), Write(cssStat2))
+        
+        self.next_slide()
+        
+        jsCode = Code (code=
+            """
+            const button = document.querySelector('.mySexyButton');
+            button.addEventListener("click", () => {
+                const square = document.querySelector('.square');
+                square.classList.remove('class1');
+                square.classList.add('class2');
+            });
+            """,    
+            language="javascript").scale(0.5)
+        
+        jsCode.next_to(cssSquare, DOWN, buff=0.75)
+        self.play(Write(jsCode))
+
+        self.next_slide()
+        # unmounts transition and mounts keyframe animation
+        # fades out all the code
+        self.play( FadeOut(cssSquare), FadeOut(cssStat1), FadeOut(cssStat2), FadeOut(jsCode))
+        self.play(transTex.animate.scale(0.3).next_to(animTex, LEFT), keyframeTex.animate.scale(10/3).next_to(animTex, DOWN*1.5), engineTex.animate.scale(1).next_to(animTex, RIGHT ))
+
+        self.next_slide()
+
+        cssSquare2 = Code (code=
+            """
+            .square {
+                width: 100px;
+                height: 100px;
+                position: relative;
+            }
+                """,
+            language="javascript").scale(0.5)
+        cssSquare2.next_to(keyframeTex, DOWN, buff=0.5)
+        
+        trigger= Code (code = """
+         .trigger {
+            animation: classTransition 1s ease-in-out forwards;
+         }
+
+        @keyframes classTransition {
+          from {
+            background-color: red;
+            left: -100px;
+          }
+          to {
+            background-color: blue;
+            right: -100px;
+          }
+        }
+        """, language="javascript").scale(0.35) 
+        
+        trigger.next_to(cssSquare2, DOWN, buff=0.5)
+
+        self.play(Write(cssSquare2), Write(trigger))
+        self.next_slide()
+        
+        jsCode2 = Code (code=
+            """
+            const square = document.querySelector('.square');
+            button.classList.add('trigger');
+            """, language="javascript").scale(0.5)
+        
+        jsCode2.next_to(trigger, DOWN, buff=0.75)
+        self.play(Write(jsCode2))
+        
+        self.next_slide()
+        # unmounts keyframe and mounts animation engine
+        # fades out all the code
+        self.play( FadeOut(cssSquare2), FadeOut(trigger), FadeOut(jsCode2))
+        self.play(transTex.animate.scale(1).next_to(animTex, LEFT), keyframeTex.animate.scale(0.3).next_to(animTex, RIGHT), engineTex.animate.scale(10/3).next_to(animTex, DOWN*1.5))
+        
+        animEnginesList = Text("Animejs, FramerMotion, etc ...").scale(0.5)
+        animEnginesList.next_to(engineTex, DOWN, buff=0.3)
+        self.play(Write(animEnginesList))
+        
+        exCodeEngine = Code (
+            code = """ 
+const square = document.querySelector('.square');
+
+// uses animejs for animation
+anime({
+  targets: square,
+  easing: 'easeInOutQuad',
+  duration: 1000,
+  background: ['red', 'blue'],
+  translateX: ['-100px', '100px'],
+  complete: function() {
+    // Update the current class after the animation completes
+    currentClass = 'class2';
+  }
+});
+            """, language="javascript").scale(0.5)
+        
+        exCodeEngine.next_to(animEnginesList, DOWN, buff=0.75)
+        self.play(Write(exCodeEngine))
+        # fades out everything
+        self.play(FadeOut(animEnginesList), FadeOut(exCodeEngine))
+        # fades out the title and texts
+        self.play(FadeOut(animTex), FadeOut(transTex), FadeOut(keyframeTex), FadeOut(engineTex))
+        self.next_slide()
+        
+    def graphicalInterfaces(self):
+        graphic = Text("graphical interafaces and animations").scale(0.8)
+        graphic.move_to(UP*2.5)
+        self.play(Write(graphic))
+        self.next_slide()
+        
+        # creates canvas and svg texts and moves them to the right and left place
+        
+        canvasTex = Text("Canvas").scale(0.55)
+        svgTex = Text("SVG").scale(0.55)
+        canvasTex.next_to(graphic, DOWN)
+        svgTex.next_to(graphic, DOWN )
+        svgTex.shift(LEFT*3.5)
+        canvasTex.shift(RIGHT*3.5)
+        self.play(Write(canvasTex), Write(svgTex))
+        
+        svgCode = Code (code= 
+            """
+<svg width="100" height="100">
+  <rect x="10" y="10" width="80" height="80" fill="red" />
+  <circle cx="50" cy="50" r="40" fill="blue" />
+  <path d="M10 10 L50 90 L90 10" stroke="black" stroke-width="2" fill="none" />
+</svg>
+            """, language="html").scale(0.35)
+        
+        svgCode.next_to(svgTex, DOWN, buff=0.25)
+        svgPros = Text("Pros").scale(0.45)
+        svgPros.next_to(svgCode, DOWN, buff=0.25)
+        svgProsList = BulletedList("Scalability: SVG images are vector-based, meaning they can be scaled infinitely without losing resolution or quality",
+                                    "Easy to animate and create interactive elements and effects ",
+                                      "Doesn't need a complex state management system",
+                                      "Very useful for real-tim data visualization and binding (e.g. d3.js)"
+                                        ).scale(0.35)
+        svgProsList.next_to(svgPros, DOWN, buff=0.25)
+        self.play(Write(svgCode), Write(svgPros), Write(svgProsList))
+        svgConsList = BulletedList("Complexity: SVG images can be more complex to create than other image formats such as PNG or JPEG. They require knowledge of vector graphics and can be more difficult to edit and modify.",
+                                   "Performance: SVG images can be slow to load and render on older browsers and devices, particularly when they contain complex animations or effects."
+                                   ).scale(0.35)
+        svgCons = Text("Cons").scale(0.45)
+        svgCons.next_to(svgProsList, DOWN, buff=0.25)
+        svgConsList.next_to(svgCons, DOWN, buff=0.25)
+        self.play(Write(svgCons), Write(svgConsList))
+
+        # do the samething for canvas
+        canvasCode = Code (code=
+            """
+                var canvas = document.getElementById("myCanvas");
+                var ctx = canvas.getContext("2d");
+                // Set initial position and velocity
+                var x = 50;
+                var y = 50;
+                var vx = 2;
+                var vy = 1;
+                // Define animation function
+                function animate() {
+                  // Clear canvas
+                  ctx.clearRect(0, 0, canvas.width, canvas.height);
+                  // Draw circle
+                  ctx.beginPath();
+                  ctx.arc(x, y, 40, 0, 2 * Math.PI);
+                  ctx.fillStyle = "blue";
+                  ctx.fill();
+                  x += vx;
+                  y += vy;
+                  requestAnimationFrame(animate);
+                }
+                animate();
+            """, language="html").scale(0.35)
+        
+        canvasCode.next_to(canvasTex, DOWN, buff=0.25)
+        canvasPros = Text("Pros").scale(0.45)
+        canvasPros.next_to(canvasCode, DOWN, buff=0.25)
+        canvasProsList = BulletedList("Performance: Canvas rendering is more performant than SVG especially for a large number of objects", 
+                                      "You get granular control of every pixel on the canvas so you can do anything",
+                                        "You can do things like 3d rendering with libraries like threejs").scale(0.35)
+        canvasProsList.next_to(canvasPros, DOWN, buff=0.25)
+        self.play(Write(canvasCode), Write(canvasPros), Write(canvasProsList))
+        canvasConsList = BulletedList("Canvas requires a lot of code to do simple things and complex and good state management").scale(0.35)
+        canvasCons = Text("Cons").scale(0.45)
+        canvasCons.next_to(canvasProsList, DOWN, buff=0.25)
+        canvasConsList.next_to(canvasCons, DOWN, buff=0.25)
+        self.play(Write(canvasCons), Write(canvasConsList))
