@@ -18,7 +18,7 @@ class BasicExample(Slide):
     
     def sectiunea_1 (self):
         return [self.introduction, self.what_to_learn,
-                self.js_detached_from_reality, self.possibilities]
+                self.js_detached_from_reality, self.possibilities,self.basics]
     
     def sectiunea_2 (self):
         return [self.basics] # continue with dom manipulation, animations, etc
@@ -70,7 +70,7 @@ class BasicExample(Slide):
         self.play(Write(warnings[0]))
         self.start_loop()
         self.play(Indicate(warnings[0], color=RED, scale_factor=1.5))
-        self.play(Write(warnings[1:]))
+        self.play(Write(warnings[1:]), run_time=4)
         self.end_loop()
         return VGroup(warnings)
     
@@ -110,11 +110,11 @@ class BasicExample(Slide):
             """
             [] + {};
 
-            [] + [];
+            {} + [];
 
             {} + {};
 
-            {} + [];""",
+            [] + [];""",
             language="javascript",
             background_stroke_width=0,
             font_size=48)
@@ -140,10 +140,10 @@ class BasicExample(Slide):
             language="javascript",
             background_stroke_width=0,
             font_size=48)
-        arr_obj = Text("'[object object]'").set_color(GREEN)
+        arr_obj = Text("'[object Object]'").set_color(GREEN)
         arr_arr = Text("''").scale(1.5).set_color(GREEN)
-        obj_arr = Text("0").scale(2.5).set_color(RED_A)
-        obj_obj = Text("'[object object][object object]'").set_color(GREEN)
+        obj_arr = Text("'[object Object]'").set_color(GREEN)
+        obj_obj = Text("'[object Object][object Object]'").set_color(GREEN)
         txt_true = Text("True").scale(2.5).set_color(GREEN)
         txt_true2 = Text("True").scale(2.5).set_color(GREEN)
         txt_false = Text("False").scale(2.5).set_color(RED_A)
@@ -155,13 +155,11 @@ class BasicExample(Slide):
         code_js.to_edge(LEFT, buff=0.5)
         self.play(Write(code_js))
         self.next_slide()
-        self.play(Write(arr_obj.move_to(UP*2+LEFT*0.3)))
-        self.next_slide()
-        self.play(Write(arr_arr.move_to(UP*0.8).align_to(arr_obj, LEFT)))
+        self.play(Write(arr_obj.move_to(UP*2+LEFT*0.3)), Write(obj_arr.move_to(UP*0.8).align_to(arr_obj, LEFT)))
         self.next_slide()
         self.play(Write(obj_obj.move_to(DOWN*0.7).align_to(arr_obj, LEFT)))
         self.next_slide()
-        self.play(Write(obj_arr.move_to(DOWN*2).align_to(arr_obj, LEFT)))
+        self.play(Write(arr_arr.move_to(DOWN*2).align_to(arr_obj, LEFT)))
         self.next_slide()
         self.play(FadeOut(arr_obj), FadeOut(arr_arr), FadeOut(obj_arr), FadeOut(obj_obj))
         self.play(ReplacementTransform(code_js, code_js_bool.to_edge(LEFT, buff=0.5)))
