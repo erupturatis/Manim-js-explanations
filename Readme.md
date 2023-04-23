@@ -33,6 +33,15 @@ manim-slides BasicExample
 
 #### For more details on rendering options and on manim in general check out the videos [mentioned earlier](https://www.youtube.com/watch?v=rUsUrbWb2D4&list=PLsMrDyoG1sZm6-jIUQCgN3BVyEVOZz3LQ)
 
+## External files
+
+External files can be downloaded directly in working folder or create a new (assets) folder and in manim.cfg add to "assets_dir = ./" the name of the folder in this case "assets_dir = ./assets"
+(To open manim.cfg use this command line in terminal):
+
+```ssh
+manim cfg show
+```
+
 ## Acknowledgments
 
 This project was created using Manim and Manim-slides. The documentation for these libraries can be found at: - [Manim Documentation](https://docs.manim.community/en/latest/) - [Manim-slides Documentation](https://github.com/jeertmans/manim-slides)

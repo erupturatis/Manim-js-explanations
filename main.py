@@ -8,11 +8,11 @@ class BasicExample(Slide):
         self.wait(0.3)
     
     def construct(self):
-        # finalArr = self.animConstructor(self.introduction, self.basics, self.domAndAnims) 
+        finalArr = self.animConstructor(self.introduction, self.basics, self.domAndAnims) 
         # SLIDES = [*self.animConstructor(self.domAndAnims)]
-        SLIDES = [*self.domAndAnims()]
+        # SLIDES = [*self.domAndAnims()]
 
-        for slide in SLIDES:
+        for slide in finalArr:
             Vmobjects = slide()
             self.play(FadeOut(Vmobjects)) 
             self.clear()
