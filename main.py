@@ -10,7 +10,7 @@ class BasicExample(Slide):
     def construct(self):
         # finalArr = self.animConstructor(self.introduction, self.basics, self.domAndAnims) 
         # SLIDES = [*self.animConstructor(self.domAndAnims)]
-        SLIDES = [*self.introduction(), *self.basics(), *self.domAndAnims()]
+        SLIDES = [*self.introduction_scenes(), *self.basics_scene(), *self.domAndAnims()]
 
         for slide in SLIDES:
             Vmobjects = slide()
@@ -23,11 +23,11 @@ class BasicExample(Slide):
             arr = [*arr, *arg()]
         return arr
     
-    def introduction (self):
+    def introduction_scenes (self):
         return [self.introduction, self.what_to_learn,
-                self.js_detached_from_reality, self.possibilities,self.basics]
+                self.js_detached_from_reality, self.possibilities]
     
-    def basics (self):
+    def basics_scene (self):
         return [self.basics] # continue with dom manipulation, animations, etc
     
     def domAndAnims(self):
@@ -710,6 +710,7 @@ anime({
         
         exCodeEngine.next_to(animEnginesList, DOWN, buff=0.75)
         self.play(Write(exCodeEngine))
+        self.next_slide()
         # fades out everything
         self.play(FadeOut(animEnginesList), FadeOut(exCodeEngine))
         # fades out the title and texts
@@ -720,7 +721,6 @@ anime({
         graphic = Text("graphical interafaces and animations").scale(0.8)
         graphic.move_to(UP*2.5)
         self.play(Write(graphic))
-        self.next_slide()
         
         # creates canvas and svg texts and moves them to the right and left place
         
