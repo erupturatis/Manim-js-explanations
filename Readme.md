@@ -14,11 +14,22 @@ After installing manim locally, you need to have Python 3.7 or later installed .
 - manim-slides==0.1.3
 
 Assuming you forked / cloned this project you can install these dependencies by running the following command in your terminal:
-`pip install -r requirements.txt`
+
+```ssh
+pip install -r requirements.txt
+```
+
 Then to create the video files you can run
-`manim main.py BasicExample`
+
+```ssh
+manim main.py BasicExample
+```
+
 And to run in presentation mode you run
-`manim-slides BasicExample`
+
+```ssh
+manim-slides BasicExample
+```
 
 #### For more details on rendering options and on manim in general check out the videos [mentioned earlier](https://www.youtube.com/watch?v=rUsUrbWb2D4&list=PLsMrDyoG1sZm6-jIUQCgN3BVyEVOZz3LQ)
 
