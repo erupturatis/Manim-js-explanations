@@ -35,7 +35,8 @@ manim-slides BasicExample
 
 ## External files
 
-External files can be downloaded directly in working folder or create a new (assets) folder and in manim.cfg add to "assets_dir = ./" the name of the folder in this case "assets_dir = ./assets"
+External files can be downloaded directly in working folder or create a new (assets) folder and in manim.cfg add to "assets_dir = ./" the name of the folder in this case "assets_dir = ./assets".
+
 (To open manim.cfg use this command line in terminal):
 
 ```ssh
