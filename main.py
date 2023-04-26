@@ -10,7 +10,7 @@ class BasicExample(Slide):
     def construct(self):
         # finalArr = self.animConstructor(self.introduction, self.basics, self.domAndAnims) 
         # SLIDES = [*self.animConstructor(self.domAndAnims)]
-        SLIDES = [*self.introduction_scenes(), *self.basics_scene(), *self.domAndAnims()]
+        SLIDES = [*self.introduction_scenes(), *self.basics_scene(), *self.domAndAnims(), self.the_end]
 
         for slide in SLIDES:
             Vmobjects = slide()
@@ -28,7 +28,7 @@ class BasicExample(Slide):
                 self.js_detached_from_reality, self.possibilities]
     
     def basics_scene (self):
-        return [self.basics] # continue with dom manipulation, animations, etc
+        return [self.basics]
     
     def domAndAnims(self):
         return [self.dom, self.anims, self.graphicalInterfaces]
@@ -303,7 +303,7 @@ class BasicExample(Slide):
                         Text ("si nu se utilizeaza in proiectele moderne")
                         ).arrange(DOWN).scale(0.5)
         errLet = Text("let nu poate fi folosita in afara blocului").scale(0.5).set_color(RED)
-        errLetredefine = Text("let nu poate fi redefinita").scale(0.5).set_color(RED)
+        errLetredefine = Text("let nu poate fi redefinita in acelasi bloc").scale(0.5).set_color(RED)
         stroke = Line(start=[2,-0.8,0], end=[6,-0.8,0], color=RED)
         for_loops = Text("for loops").scale(1.5)
         for_classic = Text("for clasic")
@@ -798,3 +798,13 @@ anime({
         canvasCons.next_to(canvasProsList, DOWN, buff=0.25)
         canvasConsList.next_to(canvasCons, DOWN, buff=0.25)
         self.play(Write(canvasCons), Write(canvasConsList))
+        self.next_slide()
+        
+        return VGroup(graphic, canvasTex, svgTex, canvasCode, svgCode, canvasPros, svgPros, canvasProsList, svgProsList, canvasCons, svgCons, canvasConsList, svgConsList)
+    
+    def the_end(self):
+        end = Text("Thank you for watching", slant=ITALIC, font="sans-serif").scale(1.8).set_color_by_gradient(ORANGE, RED, ORANGE)
+        self.play(Write(end))
+        self.wait(2)
+        self.play(FadeOut(end))
+        self.wait(1)
